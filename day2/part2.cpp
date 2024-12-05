@@ -14,7 +14,7 @@ bool isSafe(const vector<int>& numbers) {
         bool strictlyDecreasing = true;
 
         for (int i = 0; i < numbers.size(); ++i) {
-            if (skip > -1 && i == skip) {
+            if (i == skip) {
                 continue;
             }
 
