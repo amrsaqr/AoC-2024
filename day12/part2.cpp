@@ -30,6 +30,8 @@ public:
         for (int d = 0; d < 4; ++d) {
             if (isEdgeForDir(i, j, d, plant) && !fences[i][j][d]) {
                 ++sides;
+                fences[i][j][d] = true;
+
                 int d1 = (d + 1) % 4;
                 for (int si = i + di[d1], sj = j + dj[d1]; isEdgeForDir(si, sj, d, plant) && inMap(si, sj) && map[si][sj] == plant; si += di[d1], sj += dj[d1]) {
                     fences[si][sj][d] = true;
