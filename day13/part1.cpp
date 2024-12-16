@@ -16,22 +16,19 @@ int main() {
         file >> word >> word >> ch >> ch >> bx >> ch >> ch >> ch >> by;
         file >> word >> ch >> ch >> px >> ch >> ch >> ch >> py;
 
-        int minTokens = -1;
-        for (int as = 0; as <= 100; ++as) {
-            for (int bs = 0; bs <= 100; ++bs) {
+        int tokens = -1;
+        for (int as = 0; as <= 100 && tokens == -1; ++as) {
+            for (int bs = 0; bs <= 100 && tokens == -1; ++bs) {
                 int x = (ax * as) + (bx * bs);
                 int y = (ay * as) + (by * bs);
                 if (x == px && y == py) {
-                    int tokens = 3 * as + bs;
-                    if (minTokens == -1 || tokens < minTokens) {
-                        minTokens = tokens;
-                    }
+                    tokens = 3 * as + bs;
                 }
             }
         }
 
-        if (minTokens != -1) {
-            total += minTokens;
+        if (tokens != -1) {
+            total += tokens;
         }
     }
 
