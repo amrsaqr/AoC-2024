@@ -60,7 +60,7 @@ int main() {
         for (uint64_t v : prev) {
             uint64_t n = (v >> shift) & mask;
 
-            for (uint x = (i == 15 ? 1 : 0); x < 8; ++x) {
+            for (uint x = (i == outputSize - 1 ? 1 : 0); x < 8; ++x) {
                 uint64_t test = (x << 7) | n;
                 if (equation(test) == selfPrintingProgram[i]) {
                     values[i].push_back((test << shift) | v);
