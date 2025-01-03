@@ -12,44 +12,28 @@ public:
     int64_t countArrangements(const string& design) {
         uint len = design.length();
 
-        vector<vector<bool>> isPattern(len, vector<bool>(len, false));
-        setPatternsInDesign(design, isPattern);
+        vector<int64_t> dp(len + 1, -1);
+        dp[len] = 1;
 
-        vector<vector<int64_t>> dp(len, vector<int64_t>(len, -1));
-        return countArrangementsHelper(design, 0, len - 1, isPattern, dp);
+        return countArrangementsHelper(design, 0, dp);
     }
 
 private:
-    int64_t countArrangementsHelper(const string& design, uint s, uint e, const vector<vector<bool>>& isPattern, vector<vector<int64_t>>& dp) {
-        if (s == design.length()) {
-            return 1;
-        }
-
-        int64_t& result = dp[s][e];
+    int64_t countArrangementsHelper(const string& design, uint s, vector<int64_t>& dp) {
+        int64_t& result = dp[s];
         if (result != -1) {
             return result;
         }
 
         result = 0;
 
-        for (uint i = s; i <= e && i - s + 1 <= maximumPatternLength; ++i) {
-            if (isPattern[s][i]) {
-                result += countArrangementsHelper(design, i + 1, e, isPattern, dp);
+        for (uint length = 1; length <= maximumPatternLength && s < design.length(); ++length, ++s) {
+            if (patterns.count(design.substr(s - length + 1, length))) {
+                result += countArrangementsHelper(design, s + 1, dp);
             }
         }
 
         return result;
-    }
-
-    void setPatternsInDesign(const string &design, vector<vector<bool>>& isPattern) {
-        uint len = design.length();
-        for (uint i = 0; i < len; ++i) {
-            for (uint j = i; j < len && j - i + 1 <= maximumPatternLength; ++j) {
-                if (patterns.count(design.substr(i, j - i + 1))) {
-                    isPattern[i][j] = true;
-                }
-            }
-        }
     }
 
     void calculateMaximumPatternLength() {

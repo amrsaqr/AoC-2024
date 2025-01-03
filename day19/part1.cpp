@@ -11,30 +11,27 @@ public:
 
     bool isDesignPossible(const string& design) {
         uint len = design.length();
-        vector<vector<int>> dp(len, vector<int>(len, -1));
-        int result = isDesignPossibleHelper(design, 0, len - 1, dp);
+
+        vector<int> dp(len + 1, -1);
+        dp[len] = 1;
+
+        int result = isDesignPossibleHelper(design, 0, dp);
         return result == 1;
     }
 
 private:
-    int isDesignPossibleHelper(const string& design, uint s, uint e, vector<vector<int>>& dp) {
-        int& result = dp[s][e];
+    int isDesignPossibleHelper(const string& design, uint s, vector<int>& dp) {
+        int& result = dp[s];
         if (result != -1) {
             return result;
         }
 
-        if (s == e) {
-            result = patterns.count(design.substr(s, 1)) ? 1 : 0;
-        } else if (e - s + 1 <= maximumPatternLength && patterns.count(design.substr(s, e - s + 1))) {
-            result = 1;
-        } else {
-            result = 0;
-            uint subLength = e - s + 1;
-            for (uint leftLength = 1, rightLength = subLength - 1; rightLength; ++leftLength, --rightLength) {
-                if (isDesignPossibleHelper(design, s, s + leftLength - 1, dp) && isDesignPossibleHelper(design, s + leftLength, s + leftLength + rightLength - 1, dp)) {
-                    result = 1;
-                    break;
-                }
+        result = 0;
+
+        for (uint length = 1; length <= maximumPatternLength && s < design.length(); ++length, ++s) {
+            if (patterns.count(design.substr(s - length + 1, length)) && isDesignPossibleHelper(design, s + 1, dp)) {
+                result = 1;
+                break;
             }
         }
 
